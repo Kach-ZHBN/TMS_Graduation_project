@@ -1,0 +1,75 @@
+<!doctype html>
+<html lang="en" xmlns:th="http://thymeleaf.org">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>New person</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet"
+          integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
+</head>
+<body>
+
+<nav class="navbar navbar-expand-md bg-primary" data-bs-theme="dark">
+    <div class="container-fluid">
+        <img class="navbar-brand"
+             src="https://cdn.iconscout.com/icon/premium/png-512-thumb/user-employee-management-settings-gear-profile-5-5506.png?f=webp&w=256"
+             alt="new_person_logo" width="3%">
+        <span class="navbar-brand">New Person</span>
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent"
+                aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Переключатель навигации">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarSupportedContent">
+            <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+                <li class="nav-item">
+                    <a th:href="@{/}" class="nav-link">Главная</a>
+                </li>
+            </ul>
+            <span class="navbar-brand" th:text="${admin.getFirstName()}">First name</span>
+            <span class="navbar-brand" th:text="${admin.getLastName()}">Last name</span>
+            <a href="" class="btn btn-outline-light">Выйти</a>
+        </div>
+    </div>
+</nav>
+<br>
+<div class="container">
+
+    <form th:method="POST" th:action="@{/person}" th:object="${newUser}">
+        <div class="mb-3">
+            <label for="firstName" class="form-label">Имя</label>
+            <input type="text" class="form-control" id="firstName" th:field="*{firstName}">
+        </div>
+        <div class="mb-3">
+            <label for="lastName" class="form-label">Фамилия</label>
+            <input type="text" class="form-control" id="lastName" th:field="*{lastName}">
+        </div>
+        <div class="mb-3">
+            <label for="username" class="form-label">Имя пользователя</label>
+            <input type="text" class="form-control" id="username" th:field="*{username}">
+        </div>
+        <div class="mb-3">
+            <label for="password" class="form-label">Пароль</label>
+            <input type="password" class="form-control" id="password" th:object="${userPassword}">
+        </div>
+        <div class="mb-3">
+            <label for="project" class="form-label">Выберите проект</label>
+            <select th:field="*{project}" id="project">
+                <option th:each="projectName : ${projects}" th:value="${projectName}" th:text="${projectName}"></option>
+            </select>
+        </div>
+        <div class="mb-3">
+            <label for="role" class="form-label">Выберите роль</label>
+            <select th:field="*{role}" id="role">
+                <option th:each="roleName : ${roles}" th:value="${roleName}" th:text="${roleName}"></option>
+            </select>
+        </div>
+        <br>
+        <button type="submit" class="btn btn-primary">Отправить</button>
+        <a href="/" class="btn btn-danger">Отмена</a>
+    </form>
+</div>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"
+        integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz"
+        crossorigin="anonymous"></script>
+</body>
+</html>
