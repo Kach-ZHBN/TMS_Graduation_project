@@ -7,10 +7,20 @@ public class PersonDTO {
     private String lastName;
     private String username;
     private String role;
-
+    private String email;
     private String project;
 
     public PersonDTO() {
+    }
+
+    public PersonDTO(Long id, String firstName, String lastName, String username, String role, String email, String project) {
+        this.id = id;
+        this.firstName = firstName;
+        this.lastName = lastName;
+        this.username = username;
+        this.role = role;
+        this.email = email;
+        this.project = project;
     }
 
     public PersonDTO(Long id, String firstName, String lastName, String username, String role, String project) {
@@ -76,5 +86,13 @@ public class PersonDTO {
 
     public void setProject(String project) {
         this.project = project;
+    }
+
+    public String getEmail() {
+        return email;
+    }
+
+    public void setEmail(String email) {
+        this.email = email;
     }
 }

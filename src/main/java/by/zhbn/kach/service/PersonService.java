@@ -21,12 +21,14 @@ public class PersonService {
     private PersonRepository personRepository;
     private RoleRepository roleRepository;
     private ProjectRepository projectRepository;
+    private EmailService emailService;
 
     @Autowired
-    public PersonService(PersonRepository personRepository, RoleRepository roleRepository, ProjectRepository projectRepository) {
+    public PersonService(PersonRepository personRepository, RoleRepository roleRepository, ProjectRepository projectRepository, EmailService emailService) {
         this.personRepository = personRepository;
         this.roleRepository = roleRepository;
         this.projectRepository = projectRepository;
+        this.emailService = emailService;
     }
 
     public PersonDTO getPersonDtoByUsername(String username) {
@@ -37,6 +39,7 @@ public class PersonService {
                 personByUsername.getLastName(),
                 personByUsername.getUsername(),
                 personByUsername.getRole().getRoleName(),
+                personByUsername.getEmail(),
                 personByUsername.getProject().getName()
         );
         return personDTO;
@@ -53,6 +56,7 @@ public class PersonService {
                     person.getLastName(),
                     person.getUsername(),
                     person.getRole().getRoleName(),
+                    person.getEmail(),
                     person.getProject().getName()
             );
             allPersonDto.add(personDTO);
@@ -90,15 +94,17 @@ public class PersonService {
                 newPersonDTO.getUsername(),
                 new BCryptPasswordEncoder().encode(password),
                 role,
-                project
+                project,
+                newPersonDTO.getEmail()
         );
 
         if (role.getRoleName().equals("manager")) {
             newPerson.setManagedProject(project);
             project.setManager(newPerson);
         }
-
         personRepository.save(newPerson);
+        emailService.sendEmail(newPerson.getEmail(),
+                "Создание аккаунта", newPerson.getFirstName() + ", поздравляем! Ваш аккаунт создан!");
     }
 
     @Transactional
@@ -115,6 +121,7 @@ public class PersonService {
         }
         updatedPerson.setProject(project);
         updatedPerson.setRole(role);
+        updatedPerson.setEmail(updatedPersonDTO.getEmail());
 
         if (role.getRoleName().equals("manager")) {
             updatedPerson.setManagedProject(project);

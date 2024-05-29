@@ -25,7 +25,10 @@
         <div class="collapse navbar-collapse" id="navbarSupportedContent">
             <ul class="navbar-nav me-auto mb-2 mb-lg-0">
                 <li class="nav-item">
-                    <a href="/" class="nav-link">Главная</a>
+                    <a href="/" class="nav-link">Пользователи</a>
+                </li>
+                <li class="nav-item">
+                    <a href="/project" class="nav-link">Проекты</a>
                 </li>
             </ul>
             <span class="navbar-brand" th:text="${admin.getProject()}">Project name</span>
@@ -43,10 +46,11 @@
     <table class="table">
         <thead>
         <tr>
-            <th scope="col">#</th>
+            <th scope="col">ID</th>
             <th scope="col">Имя</th>
             <th scope="col">Фамилия</th>
             <th scope="col">Имя пользователя</th>
+            <th scope="col">Email</th>
             <th scope="col">Проект</th>
             <th scope="col">Роль</th>
             <th scope="col">Редактировать</th>
@@ -59,6 +63,7 @@
             <td th:text="${user.getFirstName()}">First name</td>
             <td th:text="${user.getLastName()}">Last name</td>
             <td th:text="${user.getUsername()}">Username</td>
+            <td th:text="${user.getEmail()}">Email</td>
             <td th:text="${user.getProject()}">Project</td>
             <td th:text="${user.getRole()}">Role</td>
             <td>

@@ -13,6 +13,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.sql.Timestamp;
+import java.text.DecimalFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.time.DayOfWeek;
@@ -27,13 +28,15 @@ public class TaskService {
     private PersonRepository personRepository;
     private ProjectRepository projectRepository;
     private TaskSpentTimeRepository taskSpentTimeRepository;
+    private EmailService emailService;
 
     @Autowired
-    public TaskService(TaskRepository taskRepository, PersonRepository personRepository, ProjectRepository projectRepository, TaskSpentTimeRepository taskSpentTimeRepository) {
+    public TaskService(TaskRepository taskRepository, PersonRepository personRepository, ProjectRepository projectRepository, TaskSpentTimeRepository taskSpentTimeRepository, EmailService emailService) {
         this.taskRepository = taskRepository;
         this.personRepository = personRepository;
         this.projectRepository = projectRepository;
         this.taskSpentTimeRepository = taskSpentTimeRepository;
+        this.emailService = emailService;
     }
 
     public List<TaskDTO> getTaskDtoByExecutorUsername(String executorUsername) {
@@ -76,8 +79,8 @@ public class TaskService {
                     projectTask.getTaskStatus(),
                     projectTask.getTaskSpentTimes(),
                     project.getName(),
-                    projectTask.getTaskSetter().getUsername(),
-                    projectTask.getTaskExecutor().getUsername()
+                    projectTask.getTaskSetter().getFirstName() + " " + projectTask.getTaskSetter().getLastName(),
+                    projectTask.getTaskExecutor().getFirstName() + " " + projectTask.getTaskExecutor().getLastName()
             ));
         }
         return tasksDto;
@@ -98,8 +101,12 @@ public class TaskService {
                 projectManager,
                 taskExecutor
         );
-
         taskRepository.save(newTask);
+        emailService.sendEmail(
+                newTask.getTaskExecutor().getEmail(),
+                "Новая задача в проекте " + newTask.getProject().getName(),
+                "Добавлена новая задача \"" + newTask.getName() + "\""
+        );
     }
 
     public void deleteTask(Long id) {
@@ -144,10 +151,18 @@ public class TaskService {
         task.setFinishedTime(new Timestamp(System.currentTimeMillis()));
 
         taskSpentTimeRepository.save(taskSpentTime);
+        emailService.sendEmail(
+                task.getTaskSetter().getEmail(),
+                "Завершение задачи в проекте " + task.getProject().getName(),
+                "Задача " + task.getName() + " завершена пользователем " + task.getTaskExecutor().getFirstName() + " "
+                        + task.getTaskExecutor().getLastName() + ". Время потраченное на задачу - " +
+                        new DecimalFormat("#0.00").format(getTimeSpentOnTask(task)) + " часа(ов)."
+        );
+
     }
 
     @Scheduled(cron = "0 0 17 * * MON-FRI")
-    public void autoStopTask(){
+    public void autoStopTask() {
         List<Task> tasks = taskRepository.findAllByTaskStatus(TaskStatus.EXECUTABLE);
         for (Task task : tasks) {
             TaskSpentTime taskSpentTime = task.getTaskSpentTimes().get(task.getTaskSpentTimes().size() - 1);
@@ -157,10 +172,10 @@ public class TaskService {
             TaskSpentTime newTaskSpentTime = new TaskSpentTime();
             newTaskSpentTime.setTask(task);
 
-            if(LocalDate.now().getDayOfWeek().equals(DayOfWeek.FRIDAY)){
+            if (LocalDate.now().getDayOfWeek().equals(DayOfWeek.FRIDAY)) {
                 //FRI
                 newTaskSpentTime.setStartedTime(new Timestamp(System.currentTimeMillis() + 226800000)); // 63 hours
-            }else {
+            } else {
                 //MON-THU
                 newTaskSpentTime.setStartedTime(new Timestamp(System.currentTimeMillis() + 54000000)); // 15 hours
             }
@@ -183,7 +198,7 @@ public class TaskService {
         Timestamp endTime = null;
         try {
             startTime = new Timestamp(dateFormat.parse(startDate).getTime());
-            endTime = new Timestamp(dateFormat.parse(endDate).getTime());
+            endTime = new Timestamp(dateFormat.parse(endDate).getTime() + 86400000 - 1);
         } catch (ParseException e) {
             throw new RuntimeException(e);
         }
@@ -202,20 +217,28 @@ public class TaskService {
     }
 
     private double getTaskTimeByEngineer(Person engineer, Timestamp startTime, Timestamp endTime) {
-        long resultMilisecond = 0l;
+        double resultTime = 0;
         List<Task> engineerTasks = engineer.getExecuteTasks();
         for (Task engineerTask : engineerTasks) {
             List<TaskSpentTime> taskSpentTimes = taskSpentTimeRepository.getAllByTaskAndStartedTimeIsAfterAndStoppedTimeIsBefore(
                     engineerTask, startTime, endTime);
             for (TaskSpentTime taskSpentTime : taskSpentTimes) {
-                resultMilisecond += taskSpentTime.getStoppedTime().getTime();
-                resultMilisecond -= taskSpentTime.getStartedTime().getTime();
-
+                resultTime += taskSpentTime.getStoppedTime().getTime();
+                resultTime -= taskSpentTime.getStartedTime().getTime();
             }
         }
-        return resultMilisecond / 3600000;
+        return resultTime / 3600000;
     }
 
+    public double getTimeSpentOnTask(Task task){
+        double resultTime = 0;
+        List<TaskSpentTime> taskSpentTimes = taskSpentTimeRepository.getAllByTask(task);
+        for (TaskSpentTime taskSpentTime : taskSpentTimes) {
+            resultTime += taskSpentTime.getStoppedTime().getTime();
+            resultTime -= taskSpentTime.getStartedTime().getTime();
+        }
+        return resultTime / 3600000;
+    }
 
 
 }

@@ -30,7 +30,6 @@ public class PersonController {
     public String getNewPersonPage(@AuthenticationPrincipal UserDetails userDetails, Model model) {
         model.addAttribute("admin", personService.getPersonDtoByUsername(userDetails.getUsername()));
         model.addAttribute("newUser", new PersonDTO());
-        model.addAttribute("userPassword", new String());
         model.addAttribute("roles", roleService.getAllRolesInStringFormat());
         model.addAttribute("projects", projectService.getAllProjectInStringFormat());
         return "person/new-person-page";
@@ -49,7 +48,6 @@ public class PersonController {
         model.addAttribute("admin", personService.getPersonDtoByUsername(userDetails.getUsername()));
         model.addAttribute("editedUser", personService.getPersonDtoByUsername(username));
         model.addAttribute("currentUsername", username);
-        model.addAttribute("userPassword", new String());
         model.addAttribute("roles", roleService.getAllRolesInStringFormat());
         model.addAttribute("projects", projectService.getAllProjectInStringFormat());
         return "person/edit-person-page";

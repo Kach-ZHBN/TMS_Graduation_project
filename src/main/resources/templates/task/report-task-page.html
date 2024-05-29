@@ -10,30 +10,33 @@
 <body>
 
 <nav class="navbar navbar-expand-md bg-primary" data-bs-theme="dark">
-  <div class="container-fluid">
-    <img class="navbar-brand"
-         src="https://cdn.iconscout.com/icon/premium/png-512-thumb/admin-3164071-2638067.png?f=webp&w=256"
-         alt="Admin_logo" width="3%">
-    <div>
-      <span class="navbar-brand" th:text="${manager.getFirstName()}+' '+${manager.getLastName()}">Manager name</span>
+    <div class="container-fluid">
+        <img class="navbar-brand"
+             src="https://cdn.iconscout.com/icon/premium/png-512-thumb/manager-44-386675.png?f=webp&w=256"
+             alt="Admin_logo" width="3%">
+        <div>
+            <span class="navbar-brand" th:text="${manager.getFirstName()}+' '+${manager.getLastName()}">Manager name</span>
+        </div>
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent"
+                aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Переключатель навигации">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarSupportedContent">
+            <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+                <li class="nav-item">
+                    <a href="/manager" class="nav-link">Задачи</a>
+                </li>
+                <li class="nav-item">
+                    <a href="/task/new" class="nav-link">Добавить задачу</a>
+                </li>
+                <li class="nav-item">
+                    <a href="/task/reports?startDate=&endDate=" class="nav-link">Отчет по проекту</a>
+                </li>
+            </ul>
+            <span class="navbar-brand" th:text="${manager.getProject()}">ProjectName</span>
+            <a href="" class="btn btn-outline-light">Выйти</a>
+        </div>
     </div>
-    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent"
-            aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Переключатель навигации">
-      <span class="navbar-toggler-icon"></span>
-    </button>
-    <div class="collapse navbar-collapse" id="navbarSupportedContent">
-      <ul class="navbar-nav me-auto mb-2 mb-lg-0">
-        <li class="nav-item">
-          <a href="/task/new" class="nav-link">Добавить задачу</a>
-        </li>
-        <li class="nav-item">
-          <a href="/task/reports" class="nav-link">Отчет по проекту</a>
-        </li>
-      </ul>
-      <span class="navbar-brand" th:text="${manager.getProject()}">ProjectName</span>
-      <a href="" class="btn btn-outline-light">Выйти</a>
-    </div>
-  </div>
 </nav>
 
 <div class="container">
@@ -59,7 +62,7 @@
       <th scope="col">Фамилия</th>
       <th scope="col">Имя пользователя</th>
       <th scope="col">Количество задач в работе</th>
-      <th scope="col">Время, потраченное на задачи</th>
+      <th scope="col">Время, потраченное на задачи (ч.)</th>
       <th scope="col">Задач выполнено</th>
     </tr>
     </thead>

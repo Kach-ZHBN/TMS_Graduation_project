@@ -1,28 +1,26 @@
 package by.zhbn.kach.dto;
 
-import java.util.List;
-
 public class ProjectDTO {
 
     private Long id;
 
     private String name;
 
-    private PersonDTO manager;
+    private String managerName;
 
-    private List<Long> engineersId;
-
-    private List<Long> tasksId;
 
     public ProjectDTO() {
     }
 
-    public ProjectDTO(Long id, String name, PersonDTO manager, List<Long> engineersId, List<Long> tasksId) {
+    public ProjectDTO(Long id, String name, String managerName) {
         this.id = id;
         this.name = name;
-        this.manager = manager;
-        this.engineersId = engineersId;
-        this.tasksId = tasksId;
+        this.managerName = managerName;
+    }
+
+    public ProjectDTO(Long id, String name) {
+        this.id = id;
+        this.name = name;
     }
 
     public Long getId() {
@@ -41,27 +39,11 @@ public class ProjectDTO {
         this.name = name;
     }
 
-    public PersonDTO getManager() {
-        return manager;
+    public String getManagerName() {
+        return managerName;
     }
 
-    public void setManager(PersonDTO manager) {
-        this.manager = manager;
-    }
-
-    public List<Long> getEngineersId() {
-        return engineersId;
-    }
-
-    public void setEngineersId(List<Long> engineersId) {
-        this.engineersId = engineersId;
-    }
-
-    public List<Long> getTasksId() {
-        return tasksId;
-    }
-
-    public void setTasksId(List<Long> tasksId) {
-        this.tasksId = tasksId;
+    public void setManagerName(String managerName) {
+        this.managerName = managerName;
     }
 }

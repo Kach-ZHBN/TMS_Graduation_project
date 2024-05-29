@@ -12,9 +12,12 @@
 <nav class="navbar navbar-expand-md bg-primary" data-bs-theme="dark">
     <div class="container-fluid">
         <img class="navbar-brand"
-             src="https://cdn.iconscout.com/icon/premium/png-512-thumb/user-employee-management-settings-gear-profile-5-5506.png?f=webp&w=256"
-             alt="new_person_logo" width="3%">
-        <span class="navbar-brand">New Person</span>
+             src="https://cdn.iconscout.com/icon/premium/png-512-thumb/admin-3164071-2638067.png?f=webp&w=256"
+             alt="Admin_logo" width="3%">
+        <div>
+            <span class="navbar-brand" th:text="${admin.getFirstName()}">First Name</span>
+            <span class="navbar-brand" th:text="${admin.getLastName()}">Last Name</span>
+        </div>
         <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent"
                 aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Переключатель навигации">
             <span class="navbar-toggler-icon"></span>
@@ -22,11 +25,13 @@
         <div class="collapse navbar-collapse" id="navbarSupportedContent">
             <ul class="navbar-nav me-auto mb-2 mb-lg-0">
                 <li class="nav-item">
-                    <a th:href="@{/}" class="nav-link">Главная</a>
+                    <a href="/" class="nav-link">Пользователи</a>
+                </li>
+                <li class="nav-item">
+                    <a href="/project" class="nav-link">Проекты</a>
                 </li>
             </ul>
-            <span class="navbar-brand" th:text="${admin.getFirstName()}">First name</span>
-            <span class="navbar-brand" th:text="${admin.getLastName()}">Last name</span>
+            <span class="navbar-brand" th:text="${admin.getProject()}">Project name</span>
             <a href="" class="btn btn-outline-light">Выйти</a>
         </div>
     </div>
@@ -48,8 +53,12 @@
             <input type="text" class="form-control" id="username" th:field="*{username}">
         </div>
         <div class="mb-3">
+            <label for="email" class="form-label">Email</label>
+            <input type="text" class="form-control" id="email" th:field="*{email}">
+        </div>
+        <div class="mb-3">
             <label for="password" class="form-label">Пароль</label>
-            <input type="password" class="form-control" id="password" th:object="${userPassword}">
+            <input type="password" class="form-control" id="password" name="userPassword">
         </div>
         <div class="mb-3">
             <label for="project" class="form-label">Выберите проект</label>

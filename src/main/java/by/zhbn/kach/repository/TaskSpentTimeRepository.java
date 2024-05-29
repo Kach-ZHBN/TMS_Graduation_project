@@ -12,5 +12,6 @@ import java.util.List;
 public interface TaskSpentTimeRepository extends JpaRepository<TaskSpentTime, Long> {
 
     List<TaskSpentTime> getAllByTaskAndStartedTimeIsAfterAndStoppedTimeIsBefore(Task task, Timestamp startTime, Timestamp endTime);
+    List<TaskSpentTime> getAllByTask(Task task);
 
 }

@@ -17,8 +17,8 @@ import java.util.List;
 @RequestMapping("/task")
 public class TaskController {
 
-    private PersonService personService;
-    private TaskService taskService;
+    private final PersonService personService;
+    private final TaskService taskService;
 
     @Autowired
     public TaskController(PersonService personService, TaskService taskService) {
@@ -40,6 +40,7 @@ public class TaskController {
     public String createTask(@AuthenticationPrincipal UserDetails userDetails, @ModelAttribute("newTask") TaskDTO newTaskDto){
 
         taskService.saveTask(newTaskDto, userDetails.getUsername());
+
 
         return "redirect:/";
     }

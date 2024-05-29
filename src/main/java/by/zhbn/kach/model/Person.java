@@ -25,6 +25,9 @@ public class Person {
     @Column(name = "password")
     private String password;
 
+    @Column(name = "email")
+    private String email;
+
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "role_id", referencedColumnName = "id")
     private Role role;
@@ -43,6 +46,20 @@ public class Person {
     private List<Task> executeTasks;
 
     public Person() {
+    }
+
+    public Person(Long id, String firstName, String lastName, String username, String password, String email, Role role, Project project, Project managedProject, List<Task> setTasks, List<Task> executeTasks) {
+        this.id = id;
+        this.firstName = firstName;
+        this.lastName = lastName;
+        this.username = username;
+        this.password = password;
+        this.email = email;
+        this.role = role;
+        this.project = project;
+        this.managedProject = managedProject;
+        this.setTasks = setTasks;
+        this.executeTasks = executeTasks;
     }
 
     public Person(Long id, String firstName, String lastName, String username, String password, Role role, Project project, Project managedProject, List<Task> setTasks, List<Task> executeTasks) {
@@ -78,13 +95,14 @@ public class Person {
         this.role = role;
     }
 
-    public Person(String firstName, String lastName, String username, String password, Role role, Project project) {
+    public Person(String firstName, String lastName, String username, String password, Role role, Project project, String email) {
         this.firstName = firstName;
         this.lastName = lastName;
         this.username = username;
         this.password = password;
         this.role = role;
         this.project = project;
+        this.email = email;
     }
 
     public Long getId() {
@@ -125,6 +143,14 @@ public class Person {
 
     public void setPassword(String password) {
         this.password = password;
+    }
+
+    public String getEmail() {
+        return email;
+    }
+
+    public void setEmail(String email) {
+        this.email = email;
     }
 
     public Role getRole() {

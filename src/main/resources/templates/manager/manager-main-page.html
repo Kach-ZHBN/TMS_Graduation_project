@@ -12,7 +12,7 @@
 <nav class="navbar navbar-expand-md bg-primary" data-bs-theme="dark">
   <div class="container-fluid">
     <img class="navbar-brand"
-         src="https://cdn.iconscout.com/icon/premium/png-512-thumb/admin-3164071-2638067.png?f=webp&w=256"
+         src="https://cdn.iconscout.com/icon/premium/png-512-thumb/manager-44-386675.png?f=webp&w=256"
          alt="Admin_logo" width="3%">
     <div>
       <span class="navbar-brand" th:text="${manager.getFirstName()}+' '+${manager.getLastName()}">Manager name</span>
@@ -23,6 +23,9 @@
     </button>
     <div class="collapse navbar-collapse" id="navbarSupportedContent">
       <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+          <li class="nav-item">
+              <a href="/manager" class="nav-link">Задачи</a>
+          </li>
           <li class="nav-item">
               <a href="/task/new" class="nav-link">Добавить задачу</a>
           </li>
